@@ -61,12 +61,12 @@ void Encoder_Init(void)
 	TIM_ICInitStructure.TIM_ICFilter = 0xF;							//输入滤波器参数，可以过滤信号抖动
 	TIM_ICInit(TIM4, &TIM_ICInitStructure);							//将结构体变量交给TIM_ICInit，配置TIM4的输入捕获通道
 	/*编码器接口配置*/
-	TIM_EncoderInterfaceConfig(TIM3, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Falling);
+	TIM_EncoderInterfaceConfig(TIM3, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
 																	//配置编码器模式以及两个输入通道是否反相
 																	//注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相
 																	//此函数必须在输入捕获初始化之后进行，否则输入捕获的配置会覆盖此函数的部分配置
 	
-	TIM_EncoderInterfaceConfig(TIM4, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Falling);
+	TIM_EncoderInterfaceConfig(TIM4, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
 																	//配置编码器模式以及两个输入通道是否反相
 																	//注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相
 																	//此函数必须在输入捕获初始化之后进行，否则输入捕获的配置会覆盖此函数的部分配置
@@ -96,4 +96,15 @@ int16_t Encoder_Get2(void)
 	Temp = TIM_GetCounter(TIM4);
 	TIM_SetCounter(TIM4, 0);
 	return Temp;
+}
+// 获取电机1的绝对位置（不清零）
+int16_t Encoder_GetPosition1(void)
+{
+    return (int16_t)TIM3->CNT;
+}
+
+// 获取电机2的绝对位置（不清零）
+int16_t Encoder_GetPosition2(void)
+{
+    return (int16_t)TIM4->CNT;
 }
